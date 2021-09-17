@@ -1,7 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include "utilities.h"
 
 void die(const char *fmt, ...)
 {
@@ -19,4 +19,13 @@ void die(const char *fmt, ...)
 	}
 
 	exit(1);
+}
+
+void *malloc_or_die(size_t size)
+{
+    void *ret = malloc(size);
+    if (!ret) {
+        die("Failed to allocate %zu bytes", size);
+    }
+    return ret;
 }

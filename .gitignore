@@ -35,7 +35,7 @@
 *.i*86
 *.x86_64
 *.hex
-driver
+n-puzzle
 
 # Debug files
 *.dSYM/
@@ -51,3 +51,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# input files
+input*
