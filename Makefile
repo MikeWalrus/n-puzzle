@@ -1,6 +1,6 @@
 all: options n-puzzle
 
-SRC = main.c utilities.c
+SRC = main.c utilities.c problem.c bfs.c
 OBJ = ${SRC:.c=.o}
 
 LIBS = -lreadline
@@ -22,4 +22,6 @@ n-puzzle: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
-
+clean:
+	@echo "Cleaning"
+	@rm ${OBJ} n-puzzle
