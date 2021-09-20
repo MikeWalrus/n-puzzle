@@ -1,6 +1,6 @@
 all: options n-puzzle
 
-SRC = main.c utilities.c problem.c bfs.c
+SRC = main.c utilities.c problem.c bfs.c hash_set.c
 OBJ = ${SRC:.c=.o}
 
 LIBS = -lreadline
