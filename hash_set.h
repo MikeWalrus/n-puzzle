@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define HASH_SET_SIZE 2048
+#define HASH_SET_SIZE 1048576
 
 struct HashSetNode {
     struct State *key;
@@ -17,5 +17,7 @@ struct HashSet {
 struct HashSet * hash_set_new(void);
 
 bool hash_set_found_or_add(struct HashSet *hash_set, struct State *state, int size);
+
+void hash_set_delete(struct HashSet *hashmap);
 
 #endif

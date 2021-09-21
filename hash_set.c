@@ -2,6 +2,8 @@
 #include "utilities.h"
 #include "hash_set.h"
 
+#include <stdio.h>
+
 struct HashSet * hash_set_new(void)
 {
     struct HashSet *ret = malloc_or_die(sizeof(*ret));
@@ -45,8 +47,9 @@ bool hash_set_found_or_add(struct HashSet *hash_set, struct State *state, int si
     int hash = hash_state(state, size);
     struct HashSetNode *ptr = &hash_set->heads[hash];
     while (ptr->next) {
-        if (state_is_equal(ptr->key, state, size))
+        if (state_is_equal(ptr->next->key, state, size)) {
             return true;
+        }
         ptr = ptr->next;
     }
     ptr = ptr->next = malloc_or_die(sizeof(*(ptr->next)));

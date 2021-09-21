@@ -22,7 +22,7 @@ struct TreeNode {
 };
 
 struct Result {
-    enum Operation *op;
+    enum Operation *ops;
     int op_size;
     struct TreeNode *tree;
 };
@@ -54,8 +54,11 @@ void state_delete(struct State *state, int size);
 
 void problem_init(struct Problem *p, int size);
 
-struct TreeNode * tree_node_new(struct State *state, enum Operation op);
+struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step);
 
 bool is_applicable(const struct State *state, int size, enum Operation op);
 
+struct TreeNode ** tree_node_expand(struct TreeNode *node, int size);
+
+void fill_result(struct TreeNode *node, struct Result *result);
 #endif

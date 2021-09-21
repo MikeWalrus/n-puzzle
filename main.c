@@ -50,6 +50,26 @@ void read_state(int size, struct State *state, const char *prompt)
     check_unoccupied(state, size);
 }
 
+void print_op(enum Operation op)
+{
+    char *emoji;
+    switch (op) {
+        case (up):
+            emoji = "⬆️";
+            break;
+        case (down):
+            emoji = "⬇️";
+            break;
+        case (left):
+            emoji = "⬅️";
+            break;
+        case (right):
+            emoji = "➡️";
+            break;
+    }
+    printf("%s ", emoji);
+}
+
 int main(void)
 {
     Solution s = solve_bfs;
@@ -70,7 +90,10 @@ int main(void)
     s(&problem);
 
     struct Result *result = &problem.result;
-    apply_operations(&problem.init_state, size, result->op, result->op_size);
+    for (int i = 0; i < result->op_size; i++)
+        print_op(result->ops[i]);
+    printf("\n");
+    apply_operations(&problem.init_state, size, result->ops, result->op_size);
     if (!state_is_equal(&problem.init_state, &problem.goal, size))
         die("Not solved.");
 

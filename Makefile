@@ -8,7 +8,7 @@ LDFLAGS = -g ${LIBS}
 
 all: options n-puzzle
 
-tests: list_test
+tests: list_test hash_set_test
 
 options:
 	@echo build options:
@@ -25,6 +25,10 @@ n-puzzle: ${OBJ}
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 list_test: list.o utilities.o tests/list_test.c
+	@echo CC -o $@
+	@${CC} ${CFLAGS} $^ -o $@
+
+hash_set_test: hash_set.o utilities.o problem.o tests/hash_set_test.c
 	@echo CC -o $@
 	@${CC} ${CFLAGS} $^ -o $@
 

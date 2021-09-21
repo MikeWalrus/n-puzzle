@@ -22,9 +22,8 @@ bool state_is_equal(struct State *a, struct State *b, int size)
 
     if (a_i != b_i || a_j != b_j)
         return false;
-    if (!matrix_is_equal(m_a, m_b, size))
-        return false;
-    return true;
+    m_a[a_i][a_j] = m_b[b_i][b_j];
+    return matrix_is_equal(m_a, m_b, size);
 }
 
 void apply_operation(struct State* state, int size, enum Operation op)
@@ -109,14 +108,15 @@ void problem_init(struct Problem *p, int size)
     state_init(&p->init_state, size);
     state_init(&p->goal, size);
     p->result.op_size = 0;
-    p->result.op = NULL;
+    p->result.ops = NULL;
 }
 
-struct TreeNode * tree_node_new(struct State *state, enum Operation op)
+struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step)
 {
     struct TreeNode *ret = malloc_or_die(sizeof(*ret));
     ret->state = state;
     ret->op = op;
+    ret->step = step;
     return ret;
 }
 
@@ -132,19 +132,33 @@ bool is_applicable(const struct State *state, int size, enum Operation op)
         case (right):
             return state->empty_j + 1 != size;
     }
+    return false;
 }
 
 struct TreeNode ** tree_node_expand(struct TreeNode *node, int size)
 {
     struct TreeNode **last_child = node->child;
     struct State *state = node->state;
+    int step = node->step + 1;
     for (int op = 0; op < 4; op++) {
         if (is_applicable(state, size, op)) {
             struct State *new_state = state_copy_and_apply(state, size, op);
-            struct TreeNode *new_child = tree_node_new(new_state, op);
+            struct TreeNode *new_child = tree_node_new(new_state, op, step);
+            new_child->parent = node;
             *(last_child++) = new_child;
         }
     }
     *last_child = NULL;
     return node->child;
 }
+
+void fill_result(struct TreeNode *node, struct Result *result)
+{
+    int op_size = result->op_size = node->step;
+    enum Operation *ops = result->ops = malloc_or_die(op_size * sizeof(*ops));
+    for (int i = op_size - 1; i >= 0; i--) {
+        ops[i] = node->op;
+        node = node->parent;
+    }
+}
+
