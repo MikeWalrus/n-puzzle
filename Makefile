@@ -1,12 +1,14 @@
-all: options n-puzzle
+all: options n-puzzle tests
 
-SRC = main.c utilities.c problem.c bfs.c hash_set.c
+SRC = main.c utilities.c problem.c bfs.c hash_set.c list.c
 OBJ = ${SRC:.c=.o}
 
 LIBS = -lreadline
 LDFLAGS = -g ${LIBS}
 
 all: options n-puzzle
+
+tests: list_test
 
 options:
 	@echo build options:
@@ -21,6 +23,10 @@ options:
 n-puzzle: ${OBJ}
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
+
+list_test: list.o utilities.o tests/list_test.c
+	@echo CC -o $@
+	@${CC} ${CFLAGS} $^ -o $@
 
 clean:
 	@echo "Cleaning"

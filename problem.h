@@ -13,17 +13,17 @@ enum Operation {
     up, down, left, right
 };
 
-struct Node {
+struct TreeNode {
     struct State *state;
     enum Operation op;
-    struct Node *child[4];
+    struct TreeNode *child[4];
     int step;
 };
 
 struct Result {
     enum Operation *op;
     int op_size;
-    struct Node *tree;
+    struct TreeNode *tree;
 };
 
 struct Problem {
