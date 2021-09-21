@@ -70,6 +70,39 @@ void state_init(struct State *state, int size)
     }
 }
 
+struct State * state_copy(const struct State *state, int size)
+{
+    struct State *ret = malloc(sizeof(*ret));
+    int **matrix;
+    int **old_matrix = state->matrix;
+    matrix = malloc_or_die(size * sizeof(*(matrix)));
+    for (int i = 0; i < size; i++) {
+        matrix[i] = malloc_or_die(size * sizeof(*(matrix[0])));
+        for (int j = 0; j < size; j++)
+            matrix[i][j] = old_matrix[i][j];
+    }
+    ret->matrix = matrix;
+    ret->empty_i = state->empty_i;
+    ret->empty_j = state->empty_j;
+    return ret;
+}
+
+struct State * state_copy_and_apply(const struct State *state, int size, enum Operation op)
+{
+    struct State *ret = state_copy(state, size);
+    apply_operation(ret, size, op);
+    return ret;
+}
+
+void state_delete(struct State *state, int size)
+{
+    int** matrix = state->matrix;
+    for (int i = 0; i < size; i++) {
+        free(matrix[i]);
+    }
+    free(matrix);
+}
+
 void problem_init(struct Problem *p, int size)
 {
     p->size = size;
@@ -79,3 +112,39 @@ void problem_init(struct Problem *p, int size)
     p->result.op = NULL;
 }
 
+struct TreeNode * tree_node_new(struct State *state, enum Operation op)
+{
+    struct TreeNode *ret = malloc_or_die(sizeof(*ret));
+    ret->state = state;
+    ret->op = op;
+    return ret;
+}
+
+bool is_applicable(const struct State *state, int size, enum Operation op)
+{
+    switch (op) {
+        case (up):
+            return state->empty_i != 0;
+        case (down):
+            return state->empty_i + 1 != size;
+        case (left):
+            return state->empty_j != 0;
+        case (right):
+            return state->empty_j + 1 != size;
+    }
+}
+
+struct TreeNode ** tree_node_expand(struct TreeNode *node, int size)
+{
+    struct TreeNode **last_child = node->child;
+    struct State *state = node->state;
+    for (int op = 0; op < 4; op++) {
+        if (is_applicable(state, size, op)) {
+            struct State *new_state = state_copy_and_apply(state, size, op);
+            struct TreeNode *new_child = tree_node_new(new_state, op);
+            *(last_child++) = new_child;
+        }
+    }
+    *last_child = NULL;
+    return node->child;
+}

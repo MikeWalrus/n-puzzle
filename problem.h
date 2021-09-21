@@ -16,7 +16,8 @@ enum Operation {
 struct TreeNode {
     struct State *state;
     enum Operation op;
-    struct TreeNode *child[4];
+    struct TreeNode *child[5];
+    struct TreeNode *parent;
     int step;
 };
 
@@ -45,6 +46,16 @@ void apply_operations(struct State* state, int size, enum Operation *ops, int op
 
 void state_init(struct State *state, int size);
 
+struct State * state_copy(const struct State *state, int size);
+
+struct State * state_copy_and_apply(const struct State *state, int size, enum Operation op);
+
+void state_delete(struct State *state, int size);
+
 void problem_init(struct Problem *p, int size);
+
+struct TreeNode * tree_node_new(struct State *state, enum Operation op);
+
+bool is_applicable(const struct State *state, int size, enum Operation op);
 
 #endif
