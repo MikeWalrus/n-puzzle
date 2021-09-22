@@ -19,6 +19,7 @@ struct TreeNode {
     struct TreeNode *child[5];
     struct TreeNode *parent;
     int step;
+    bool has_choosen;
 };
 
 struct Result {

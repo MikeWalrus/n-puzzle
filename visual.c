@@ -63,7 +63,9 @@ void generate_dot(struct TreeNode *root, int size)
         fprintf(fp, "\t%d\n", node->step);
         fprint_state(fp, node->state, size);
         if (node->parent) {
-            fprintf(fp, "\t%d -> %d [headlabel=\"%s\" labelangle=70 labelfontsize=10]\n", node->parent->step, node->step, get_op_emoji(node->op));
+            fprintf(fp, "\t%d -> %d" 
+                    "[headlabel=\"%s\" labelangle=70 labelfontsize=10 %s]\n",
+                    node->parent->step, node->step, get_op_emoji(node->op), node->has_choosen ? "color=green penwidth=3" : "");
         }
 
         struct TreeNode **childs = &node->child[0];

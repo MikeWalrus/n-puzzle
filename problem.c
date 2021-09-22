@@ -118,6 +118,7 @@ struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step
     ret->op = op;
     ret->step = step;
     ret->child[0] = NULL;
+    ret->has_choosen = false;
     return ret;
 }
 
@@ -159,6 +160,7 @@ void fill_result(struct TreeNode *node, struct Result *result)
     struct TreeNode *tmp = node;
     while (tmp->parent) {
         op_size++;
+        tmp->has_choosen = true;
         tmp = tmp->parent;
     }
     result->op_size = op_size;

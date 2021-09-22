@@ -56,5 +56,6 @@ dkms.conf
 # input files
 input*
 
-# graphviz dot files
+# graphical files
 *.dot
+*.svg
