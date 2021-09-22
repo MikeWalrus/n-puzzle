@@ -3,7 +3,7 @@
 #include "hash_set.h"
 #include "utilities.h"
 
-void solve_bfs(struct Problem *problem)
+void solve_dfs(struct Problem *problem)
 {
     struct List open_list;
     list_init(&open_list);

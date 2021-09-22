@@ -4,6 +4,6 @@
 #include "problem.h"
 
 const char * get_op_emoji(enum Operation op);
-void generate_dot(struct TreeNode *root, int size);
+void generate_dot(struct TreeNode *root, int size, const char *filename);
 
 #endif

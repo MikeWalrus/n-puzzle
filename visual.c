@@ -61,9 +61,8 @@ void fprint_node(FILE *fp, struct TreeNode *node, int size)
     }
 }
 
-void generate_dot(struct TreeNode *root, int size)
+void generate_dot(struct TreeNode *root, int size, const char *filename)
 {
-    const char *filename = "tree.dot";
     FILE *fp = fopen(filename, "w");
     if (!fp)
         die("Can't open file: %s.", filename);
