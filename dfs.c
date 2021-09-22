@@ -16,7 +16,7 @@ void solve_bfs(struct Problem *problem)
     list_push(&open_list, root);
     hash_set_found_or_add(visited, root->state, size);
     do {
-        struct TreeNode *node = list_pop_front(&open_list);
+        struct TreeNode *node = list_pop_back(&open_list);
         if (state_is_equal(node->state, &problem->goal, size)) {
             fill_result(node, &problem->result);
             break;

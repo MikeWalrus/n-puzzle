@@ -44,6 +44,23 @@ void fprint_state(FILE *fp, struct State *state, int size)
     fprintf(fp, "</table>>]\n");
 }
 
+void fprint_edge(FILE *fp, struct TreeNode *node)
+{
+    fprintf(fp, "\t%d -> %d" 
+            "[headlabel=\"%s\" taillabel=\"%d\" labelangle=70 labelfontsize=10 %s]\n",
+            node->parent->step, node->step,
+            get_op_emoji(node->op), node->step, node->has_choosen ? "color=green penwidth=3" : "");
+}
+
+void fprint_node(FILE *fp, struct TreeNode *node, int size)
+{
+    fprintf(fp, "\t%d ", node->step);
+    fprint_state(fp, node->state, size);
+    if (node->parent) {
+        fprint_edge(fp, node);
+    }
+}
+
 void generate_dot(struct TreeNode *root, int size)
 {
     const char *filename = "tree.dot";
@@ -59,15 +76,7 @@ void generate_dot(struct TreeNode *root, int size)
     list_push(&list, root);
     do {
         struct TreeNode *node = list_pop_front(&list);
-
-        fprintf(fp, "\t%d\n", node->step);
-        fprint_state(fp, node->state, size);
-        if (node->parent) {
-            fprintf(fp, "\t%d -> %d" 
-                    "[headlabel=\"%s\" labelangle=70 labelfontsize=10 %s]\n",
-                    node->parent->step, node->step, get_op_emoji(node->op), node->has_choosen ? "color=green penwidth=3" : "");
-        }
-
+        fprint_node(fp, node, size);
         struct TreeNode **childs = &node->child[0];
         for (; *childs; childs++) {
             struct TreeNode *child = *childs;
