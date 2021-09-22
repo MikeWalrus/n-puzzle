@@ -86,7 +86,7 @@ void check(struct Problem *problem)
 
 void usage(const char *program)
 {
-    die("usage: %s [-a bfs/dfs] [-h]", program);
+    die("usage: %s [-a bfs/dfs] [-o output_file]  [-h]", program);
 }
 
 Solution get_algorithm(const char *name)
