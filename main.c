@@ -6,6 +6,7 @@
 #include "utilities.h"
 #include "problem.h"
 #include "solutions.h"
+#include "visual.h"
 
 int str_to_int(char **str, const char *msg)
 {
@@ -50,26 +51,6 @@ void read_state(int size, struct State *state, const char *prompt)
     check_unoccupied(state, size);
 }
 
-void print_op(enum Operation op)
-{
-    char *emoji;
-    switch (op) {
-        case (up):
-            emoji = "⬆️";
-            break;
-        case (down):
-            emoji = "⬇️";
-            break;
-        case (left):
-            emoji = "⬅️";
-            break;
-        case (right):
-            emoji = "➡️";
-            break;
-    }
-    printf("%s ", emoji);
-}
-
 int main(void)
 {
     Solution s = solve_bfs;
@@ -91,8 +72,10 @@ int main(void)
 
     struct Result *result = &problem.result;
     for (int i = 0; i < result->op_size; i++)
-        print_op(result->ops[i]);
+        printf("%s ", get_op_emoji(result->ops[i]));
     printf("\n");
+
+    generate_dot(result->tree, size);
     apply_operations(&problem.init_state, size, result->ops, result->op_size);
     if (!state_is_equal(&problem.init_state, &problem.goal, size))
         die("Not solved.");

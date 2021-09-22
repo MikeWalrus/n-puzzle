@@ -117,6 +117,7 @@ struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step
     ret->state = state;
     ret->op = op;
     ret->step = step;
+    ret->child[0] = NULL;
     return ret;
 }
 
@@ -137,13 +138,13 @@ bool is_applicable(const struct State *state, int size, enum Operation op)
 
 struct TreeNode ** tree_node_expand(struct TreeNode *node, int size)
 {
+    static int step = 1;
     struct TreeNode **last_child = node->child;
     struct State *state = node->state;
-    int step = node->step + 1;
     for (int op = 0; op < 4; op++) {
         if (is_applicable(state, size, op)) {
             struct State *new_state = state_copy_and_apply(state, size, op);
-            struct TreeNode *new_child = tree_node_new(new_state, op, step);
+            struct TreeNode *new_child = tree_node_new(new_state, op, ++step);
             new_child->parent = node;
             *(last_child++) = new_child;
         }
@@ -154,7 +155,13 @@ struct TreeNode ** tree_node_expand(struct TreeNode *node, int size)
 
 void fill_result(struct TreeNode *node, struct Result *result)
 {
-    int op_size = result->op_size = node->step;
+    int op_size = 0;
+    struct TreeNode *tmp = node;
+    while (tmp->parent) {
+        op_size++;
+        tmp = tmp->parent;
+    }
+    result->op_size = op_size;
     enum Operation *ops = result->ops = malloc_or_die(op_size * sizeof(*ops));
     for (int i = op_size - 1; i >= 0; i--) {
         ops[i] = node->op;

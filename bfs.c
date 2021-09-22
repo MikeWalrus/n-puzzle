@@ -18,6 +18,7 @@ void solve_bfs(struct Problem *problem)
         struct TreeNode *node = list_pop_front(&open_list);
         if (state_is_equal(node->state, &problem->goal, size)) {
             fill_result(node, &problem->result);
+            problem->result.tree = root;
             list_delete(&open_list);
             hash_set_delete(visited);
             return;

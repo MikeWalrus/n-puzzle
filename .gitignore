@@ -36,7 +36,7 @@
 *.x86_64
 *.hex
 n-puzzle
-list_test
+*_test
 
 # Debug files
 *.dSYM/
@@ -55,3 +55,6 @@ dkms.conf
 
 # input files
 input*
+
+# graphviz dot files
+*.dot
