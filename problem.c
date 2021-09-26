@@ -142,11 +142,13 @@ struct TreeNode ** tree_node_expand(struct TreeNode *node, int size)
     static int step = 1;
     struct TreeNode **last_child = node->child;
     struct State *state = node->state;
+    int depth = node->depth + 1;
     for (int op = 0; op < 4; op++) {
         if (is_applicable(state, size, op)) {
             struct State *new_state = state_copy_and_apply(state, size, op);
             struct TreeNode *new_child = tree_node_new(new_state, op, ++step);
             new_child->parent = node;
+            new_child->depth = depth;
             *(last_child++) = new_child;
         }
     }

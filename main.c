@@ -84,9 +84,26 @@ void check(struct Problem *problem)
         die("Not solved.");
 }
 
+char * get_algorithm_names(void)
+{
+    int len = 1;
+    for (int i = 0; i < sizeof(algorithms) / sizeof(algorithms[0]); i++) {
+        len += strlen(algorithms[i].name) + 1;
+    }
+    char *ret = malloc(len);
+    ret[0] = 0;
+    for (int i = 0; i < sizeof(algorithms) / sizeof(algorithms[0]); i++) {
+        strcat(ret, algorithms[i].name);
+        strcat(ret, "/");
+    }
+    ret[len - 2] = 0;
+    return ret;
+}
+
 void usage(const char *program)
 {
-    die("usage: %s [-a bfs/dfs] [-o output_file]  [-h]", program);
+    char *names = get_algorithm_names();
+    die("usage: %s [-a %s] [-o output_file]  [-h]", program, names);
 }
 
 Solution get_algorithm(const char *name)
