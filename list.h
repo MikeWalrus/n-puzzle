@@ -25,6 +25,8 @@ struct TreeNode * list_pop_front(struct List *list);
 
 struct TreeNode * list_pop_back(struct List *list);
 
+struct TreeNode * list_pop_min(struct List *list);
+
 bool list_is_empty(struct List *list);
 
 #endif
