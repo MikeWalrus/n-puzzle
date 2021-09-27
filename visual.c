@@ -25,10 +25,12 @@ const char * get_op_emoji(enum Operation op)
     return emoji;
 }
 
-void fprint_state(FILE *fp, struct State *state, int size)
+void fprint_state(FILE *fp, struct State *state, int heuristic,  int size)
 {
     int** matrix = state->matrix;
-    fprintf(fp, "[label=<<table>");
+    fprintf(fp, "label=<<table>");
+    if (heuristic)
+        fprintf(fp, "<tr><td colspan=\"%d\" style=\"rounded\">%d</td></tr>", size, heuristic);
     int empty_i = state->empty_i;
     int empty_j = state->empty_j;
     for (int i = 0; i < size; i++) {
@@ -41,13 +43,20 @@ void fprint_state(FILE *fp, struct State *state, int size)
         }
         fprintf(fp, "</tr>");
     }
-    fprintf(fp, "</table>>]\n");
+    fprintf(fp, "</table>> ");
+}
+
+void fprint_node_label(FILE *fp, struct TreeNode *node, int size)
+{
+    fprintf(fp, "[");
+    fprint_state(fp, node->state, node->heuristic, size);
+    fprintf(fp, "]\n");
 }
 
 void fprint_edge(FILE *fp, struct TreeNode *node)
 {
     fprintf(fp, "\t%d -> %d" 
-            "[headlabel=\"%s\" taillabel=\"%d\" labelangle=70 labelfontsize=10 %s]\n",
+            "[headlabel=\"%s\" taillabel=\"%d\" %s]\n",
             node->parent->step, node->step,
             get_op_emoji(node->op), node->step, node->has_choosen ? "color=green penwidth=3" : "");
 }
@@ -55,10 +64,9 @@ void fprint_edge(FILE *fp, struct TreeNode *node)
 void fprint_node(FILE *fp, struct TreeNode *node, int size)
 {
     fprintf(fp, "\t%d ", node->step);
-    fprint_state(fp, node->state, size);
-    if (node->parent) {
+    fprint_node_label(fp, node, size);
+    if (node->parent)
         fprint_edge(fp, node);
-    }
 }
 
 void generate_dot(struct TreeNode *root, int size, const char *filename)
@@ -69,6 +77,7 @@ void generate_dot(struct TreeNode *root, int size, const char *filename)
 
     fprintf(fp, "digraph Tree {\n");
     fprintf(fp, "\tnode [shape=plaintext]\n");
+    fprintf(fp, "\tedge [labelangle=70 labelfontsize=10]\n");
     struct List list;
     list_init(&list);
 
@@ -83,7 +92,6 @@ void generate_dot(struct TreeNode *root, int size, const char *filename)
         }
 
     } while (!list_is_empty(&list));
-
 
     fprintf(fp, "}\n");
 

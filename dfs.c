@@ -22,9 +22,9 @@ void solve_dfs(struct Problem *problem)
             break;
         }
 
-        struct TreeNode ** childs = tree_node_expand(node, size);
-        for (; *childs; childs++) {
-            struct TreeNode *child = *childs;
+        struct TreeNode ** children = tree_node_expand(node, size);
+        for (; *children; children++) {
+            struct TreeNode *child = *children;
             if (!hash_set_found_or_add(visited, child->state, size))
                 list_push(&open_list, child);
         }
@@ -34,6 +34,8 @@ void solve_dfs(struct Problem *problem)
     hash_set_delete(visited);
     return;
 }
+
+#define MAX_DEPTH 5
 
 void solve_branch_and_bound(struct Problem *problem)
 {
@@ -54,12 +56,12 @@ void solve_branch_and_bound(struct Problem *problem)
             fill_result(node, &problem->result);
             break;
         }
-        if (node->depth > 10)
+        if (node->depth > MAX_DEPTH)
             continue;
 
-        struct TreeNode ** childs = tree_node_expand(node, size);
-        for (; *childs; childs++) {
-            struct TreeNode *child = *childs;
+        struct TreeNode ** children = tree_node_expand(node, size);
+        for (; *children; children++) {
+            struct TreeNode *child = *children;
             if (!hash_set_found_or_add(visited, child->state, size))
                 list_push(&open_list, child);
         }

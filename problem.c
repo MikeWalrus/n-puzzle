@@ -119,7 +119,14 @@ struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step
     ret->step = step;
     ret->child[0] = NULL;
     ret->has_choosen = false;
+    ret->heuristic = 0;
     return ret;
+}
+
+void tree_node_delete(struct TreeNode *node, int size)
+{
+    state_delete(node->state, size);
+    free(node);
 }
 
 bool is_applicable(const struct State *state, int size, enum Operation op)

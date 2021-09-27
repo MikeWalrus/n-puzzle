@@ -75,13 +75,12 @@ void print_ops(enum Operation *ops, int op_size)
     printf("\n");
 }
 
-void check(struct Problem *problem)
+bool has_solved(struct Problem *problem)
 {
     int size = problem->size;
     struct Result *result = &problem->result;
     apply_operations(&problem->init_state, size, result->ops, result->op_size);
-    if (!state_is_equal(&problem->init_state, &problem->goal, size))
-        die("Not solved.");
+    return state_is_equal(&problem->init_state, &problem->goal, size);
 }
 
 char * get_algorithm_names(void)
@@ -145,7 +144,9 @@ int main(int argc, char **argv)
 
     solve(&problem);
     
-    check(&problem);
+    if (!has_solved(&problem))
+        fprintf(stderr, "Not solved.\n");
+
     struct Result *result = &problem.result;
     print_ops(result->ops, result->op_size);
     if (output_file)
