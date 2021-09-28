@@ -60,3 +60,4 @@ input*
 *.dot
 *.svg
 *.jpg
+!bfs.svg

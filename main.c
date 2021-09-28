@@ -143,7 +143,7 @@ int main(int argc, char **argv)
     read_problem(&problem);
 
     solve(&problem);
-    
+
     if (!has_solved(&problem))
         fprintf(stderr, "Not solved.\n");
 
