@@ -19,12 +19,16 @@
 
 #include "problem.h"
 
-int get_heuristic(struct State *s, struct State *goal, int size)
+/**
+ * Count the number of misplaced digits.
+ */
+static int get_heuristic(struct State *s, struct State *goal, int size)
 {
     int ret = 0;
     int **matrix = s->matrix;
     int **matrix_goal = goal->matrix;
-    matrix[s->empty_i][s->empty_j] = matrix_goal[goal->empty_i][goal->empty_j];
+    matrix[s->empty_i][s->empty_j] = matrix_goal[s->empty_i][s->empty_j];
+
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (matrix[i][j] != matrix_goal[i][j])
@@ -34,7 +38,7 @@ int get_heuristic(struct State *s, struct State *goal, int size)
     return ret;
 }
 
-void children_delete_others(struct TreeNode **children, struct TreeNode *the_one, int size)
+static void children_delete_others(struct TreeNode **children, struct TreeNode *the_one, int size)
 {
     for (struct TreeNode **p = children; *p; p++) {
         struct TreeNode *child = *p;
