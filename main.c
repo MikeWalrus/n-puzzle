@@ -119,7 +119,8 @@ char * get_algorithm_names(void)
 void usage(const char *program)
 {
     char *names = get_algorithm_names();
-    die("usage: %s [-a %s] [-o output_file]  [-h]", program, names);
+    printf("usage: %s [-a %s] [-o output_file]  [-h]", program, names);
+    exit(1);
 }
 
 Solution get_algorithm(const char *name)

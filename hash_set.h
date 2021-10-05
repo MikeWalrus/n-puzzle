@@ -37,4 +37,16 @@ bool hash_set_found_or_add(struct HashSet *hash_set, struct State *state, int si
 
 void hash_set_delete(struct HashSet *hashmap);
 
+#define HASH_MAP_SIZE 1048576
+
+struct HashMapNode {
+    struct State *key;
+    struct TreeNode *value;
+    struct HashMapNode *next;
+};
+
+struct HashMap {
+    struct HashMapNode heads[HASH_SET_SIZE];
+};
+
 #endif

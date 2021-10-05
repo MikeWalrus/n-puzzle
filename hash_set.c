@@ -74,3 +74,42 @@ bool hash_set_found_or_add(struct HashSet *hash_set, struct State *state, int si
     ptr->next = NULL;
     return false;
 }
+
+struct HashMap * hash_map_new(void)
+{
+    struct HashMap *ret = malloc_or_die(sizeof(*ret));
+    struct HashMapNode *heads = ret->heads;
+    for (int i = 0; i < HASH_MAP_SIZE; i++) {
+        heads[i].next = NULL;
+    }
+    return ret;
+}
+
+void hash_map_delete(struct HashMap *hashmap)
+{
+    for (int i = 0; i < HASH_SET_SIZE; i++) {
+        struct HashMapNode *node = hashmap->heads[i].next;
+        while (node) {
+            struct HashMapNode *delete_this = node;
+            node = node->next;
+            free(delete_this);
+        }
+    }
+}
+
+bool hash_map_found_or_add(struct HashMap *hash_map, struct State *state, int size, struct TreeNode **value)
+{
+    int hash = hash_state(state, size);
+    struct HashMapNode *ptr = &hash_map->heads[hash];
+    while (ptr->next) {
+        if (state_is_equal(ptr->next->key, state, size)) {
+            *value = ptr->next->value;
+            return true;
+        }
+        ptr = ptr->next;
+    }
+    ptr = ptr->next = malloc_or_die(sizeof(*(ptr->next)));
+    ptr->key = state;
+    ptr->next = NULL;
+    return false;
+}
