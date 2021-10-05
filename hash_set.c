@@ -97,19 +97,19 @@ void hash_map_delete(struct HashMap *hashmap)
     }
 }
 
-bool hash_map_found_or_add(struct HashMap *hash_map, struct State *state, int size, struct TreeNode **value)
+struct TreeNode * hash_map_found_or_add(struct HashMap *hash_map, struct State *state, int size, struct TreeNode *value)
 {
     int hash = hash_state(state, size);
     struct HashMapNode *ptr = &hash_map->heads[hash];
     while (ptr->next) {
         if (state_is_equal(ptr->next->key, state, size)) {
-            *value = ptr->next->value;
-            return true;
+            return ptr->next->value;
         }
         ptr = ptr->next;
     }
     ptr = ptr->next = malloc_or_die(sizeof(*(ptr->next)));
     ptr->key = state;
+    ptr->value = value;
     ptr->next = NULL;
     return false;
 }

@@ -23,6 +23,7 @@ void solve_bfs(struct Problem *problem);
 void solve_dfs(struct Problem *problem);
 void solve_branch_and_bound(struct Problem *problem);
 void solve_hill_climbing(struct Problem *problem);
+void solve_a_star(struct Problem *problem);
 
 struct Algorithm {
     const char * name;
@@ -34,7 +35,8 @@ static struct Algorithm algorithms[] =
     {"bfs", solve_bfs},
     {"dfs", solve_dfs},
     {"bnb", solve_branch_and_bound},
-    {"hill_climbing", solve_hill_climbing}
+    {"hill_climbing", solve_hill_climbing},
+    {"a_star", solve_a_star}
 };
 
 #endif

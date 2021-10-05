@@ -1,6 +1,6 @@
 all: options n-puzzle tests
 
-SRC = main.c utilities.c problem.c hash_set.c list.c visual.c bfs.c dfs.c hill_climbing.c
+SRC = main.c utilities.c problem.c hash_set.c list.c visual.c bfs.c dfs.c hill_climbing.c a_star.c
 OBJ = ${SRC:.c=.o}
 
 LIBS = -lreadline
@@ -20,7 +20,7 @@ options:
 	@echo CC $<
 	@${CC} -c ${CFLAGS} $<
 
-n-puzzle: ${OBJ}
+n-puzzle: ${OBJ} solutions.h
 	@echo CC -o $@
 	@${CC} -o $@ ${OBJ} ${LDFLAGS}
 

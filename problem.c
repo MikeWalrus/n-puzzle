@@ -137,6 +137,8 @@ struct TreeNode * tree_node_new(struct State *state, enum Operation op, int step
     ret->child[0] = NULL;
     ret->has_choosen = false;
     ret->heuristic = 0;
+    ret->is_deleted = false;
+    ret->has_changed = false;
     return ret;
 }
 
@@ -195,5 +197,33 @@ void fill_result(struct TreeNode *node, struct Result *result)
         ops[i] = node->op;
         node = node->parent;
     }
+}
+
+bool is_ancestor_to(struct TreeNode *ancestor, struct TreeNode *decendant, int size)
+{
+    for (; decendant->parent; decendant = decendant->parent) {
+        if (state_is_equal(decendant->state, ancestor->state, size))
+            return true;
+    }
+    return false;
+}
+
+/**
+ * Count the number of misplaced digits.
+ */
+int get_h(struct State *s, struct State *goal, int size)
+{
+    int ret = 0;
+    int **matrix = s->matrix;
+    int **matrix_goal = goal->matrix;
+    matrix[s->empty_i][s->empty_j] = matrix_goal[s->empty_i][s->empty_j];
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (matrix[i][j] != matrix_goal[i][j])
+                ret++;
+        }
+    }
+    return ret;
 }
 

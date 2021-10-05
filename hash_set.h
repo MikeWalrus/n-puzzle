@@ -49,4 +49,10 @@ struct HashMap {
     struct HashMapNode heads[HASH_SET_SIZE];
 };
 
+struct HashMap * hash_map_new(void);
+
+void hash_map_delete(struct HashMap *hashmap);
+
+struct TreeNode * hash_map_found_or_add(struct HashMap *hash_map, struct State *state, int size, struct TreeNode *value);
+
 #endif

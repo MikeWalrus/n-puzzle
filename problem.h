@@ -39,6 +39,8 @@ struct TreeNode {
     int depth;
     int heuristic;
     bool has_choosen;
+    bool is_deleted;
+    bool has_changed;
 };
 
 struct Result {
@@ -83,4 +85,9 @@ bool is_applicable(const struct State *state, int size, enum Operation op);
 struct TreeNode ** tree_node_expand(struct TreeNode *node, int size);
 
 void fill_result(struct TreeNode *node, struct Result *result);
+
+bool is_ancestor_to(struct TreeNode *ancestor, struct TreeNode *decendant, int size);
+
+int get_h(struct State *s, struct State *goal, int size);
+
 #endif

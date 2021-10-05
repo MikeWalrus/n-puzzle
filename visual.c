@@ -63,16 +63,22 @@ void fprint_state(FILE *fp, struct State *state, int heuristic,  int size)
     fprintf(fp, "</table>> ");
 }
 
-void fprint_node_label(FILE *fp, struct TreeNode *node, int size)
+void fprint_node_attrs(FILE *fp, struct TreeNode *node, int size)
 {
     fprintf(fp, "[");
     fprint_state(fp, node->state, node->heuristic, size);
+    if (node->is_deleted)
+        fprintf(fp, " color=grey90");
+    if (node->has_changed) {
+        fprintf(fp, " color=red");
+        printf("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+    }
     fprintf(fp, "]\n");
 }
 
 void fprint_edge(FILE *fp, struct TreeNode *node)
 {
-    fprintf(fp, "\t%d -> %d" 
+    fprintf(fp, "\t%d -> %d"
             "[headlabel=\"%s\" taillabel=\"%d\" %s]\n",
             node->parent->step, node->step,
             get_op_emoji(node->op), node->step, node->has_choosen ? "color=green penwidth=3" : "");
@@ -81,7 +87,7 @@ void fprint_edge(FILE *fp, struct TreeNode *node)
 void fprint_node(FILE *fp, struct TreeNode *node, int size)
 {
     fprintf(fp, "\t%d ", node->step);
-    fprint_node_label(fp, node, size);
+    fprint_node_attrs(fp, node, size);
     if (node->parent)
         fprint_edge(fp, node);
 }

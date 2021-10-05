@@ -19,25 +19,6 @@
 
 #include "problem.h"
 
-/**
- * Count the number of misplaced digits.
- */
-static int get_heuristic(struct State *s, struct State *goal, int size)
-{
-    int ret = 0;
-    int **matrix = s->matrix;
-    int **matrix_goal = goal->matrix;
-    matrix[s->empty_i][s->empty_j] = matrix_goal[s->empty_i][s->empty_j];
-
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            if (matrix[i][j] != matrix_goal[i][j])
-                ret++;
-        }
-    }
-    return ret;
-}
-
 static void children_delete_others(struct TreeNode **children, struct TreeNode *the_one, int size)
 {
     for (struct TreeNode **p = children; *p; p++) {
@@ -56,7 +37,7 @@ void solve_hill_climbing(struct Problem *problem)
     struct TreeNode *root = tree_node_new(&problem->init_state, 0, 0);
 
     problem->result.tree = root;
-    int min_heuristic = root->heuristic = get_heuristic(root->state, &problem->goal, size);
+    int min_heuristic = root->heuristic = get_h(root->state, &problem->goal, size);
     struct TreeNode *node = root;
     for (; ; ) {
         struct TreeNode **children = tree_node_expand(node, size);
@@ -68,7 +49,7 @@ void solve_hill_climbing(struct Problem *problem)
                 return;
             }
 
-            int heuristic = child->heuristic = get_heuristic(child->state, goal, size);
+            int heuristic = child->heuristic = get_h(child->state, goal, size);
             if (heuristic < min_heuristic) {
                 min_heuristic = heuristic;
                 next_step = child;
