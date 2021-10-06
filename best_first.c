@@ -20,7 +20,7 @@
 #include "hash_set.h"
 #include "utilities.h"
 
-void solve_bfs(struct Problem *problem)
+void solve_best_first(struct Problem *problem)
 {
     struct List open_list;
     list_init(&open_list);
@@ -28,12 +28,14 @@ void solve_bfs(struct Problem *problem)
     struct HashSet *visited = hash_set_new();
 
     int size = problem->size;
+    struct State *goal = &problem->goal;
     struct TreeNode *root = tree_node_new(&problem->init_state, 0, 0);
 
     list_push(&open_list, root);
+    root->heuristic = get_h(root->state, goal, size);
     hash_set_found_or_add(visited, root->state, size);
     do {
-        struct TreeNode *node = list_pop_front(&open_list);
+        struct TreeNode *node = list_pop_min(&open_list);
         if (state_is_equal(node->state, &problem->goal, size)) {
             fill_result(node, &problem->result);
             break;
@@ -42,9 +44,10 @@ void solve_bfs(struct Problem *problem)
         struct TreeNode ** children = tree_node_expand(node, size);
         for (; *children; children++) {
             struct TreeNode *child = *children;
-            if (!hash_set_found_or_add(visited, child->state, size))
+            if (!hash_set_found_or_add(visited, child->state, size)) {
                 list_push(&open_list, child);
-            else
+                child->heuristic = get_h(child->state, goal, size);
+            } else
                 child->is_deleted = true;
         }
     } while (!list_is_empty(&open_list));

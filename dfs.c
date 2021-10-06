@@ -44,6 +44,8 @@ void solve_dfs(struct Problem *problem)
             struct TreeNode *child = *children;
             if (!hash_set_found_or_add(visited, child->state, size))
                 list_push(&open_list, child);
+            else
+                child->is_deleted = true;
         }
     } while (!list_is_empty(&open_list));
     problem->result.tree = root;
@@ -81,6 +83,8 @@ void solve_branch_and_bound(struct Problem *problem)
             struct TreeNode *child = *children;
             if (!hash_set_found_or_add(visited, child->state, size))
                 list_push(&open_list, child);
+            else
+                child->is_deleted = true;
         }
     } while (!list_is_empty(&open_list));
     problem->result.tree = root;
